@@ -1,0 +1,125 @@
+﻿@{
+    ViewData["Title"] = "Hotel Dashboard";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<div class="container-fluid mt-4">
+    <!-- Dashboard Title Section -->
+    <div class="row mb-4">
+        <div class="col text-center">
+            <h2 class="text-primary">Hotel Dashboard</h2>
+            <hr class="w-25 mx-auto">
+        </div>
+    </div>
+
+    <!-- Sidebar and Content Section -->
+    <div class="row">
+        <!-- Left Sidebar -->
+        <div class="col-md-3">
+            <div class="d-flex flex-column gap-3">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h6 class="card-title text-info">User Details</h6>
+                        <a href="/Account/UserDetails" class="btn btn-sm btn-primary">View Profile</a>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h6 class="card-title text-success">Book a Room</h6>
+                        <a href="/Booking/CreateBooking" class="btn btn-sm btn-success">Book Now</a>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h6 class="card-title text-warning">Feedback</h6>
+                        <a href="/Feedback/SubmitFeedback" class="btn btn-sm btn-warning">Give Feedback</a>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h6 class="card-title text-secondary">Room History</h6>
+                        <a href="/Booking/BookingHistory" class="btn btn-sm btn-secondary">View History</a>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h6 class="card-title text-danger">Room Types</h6>
+                        <a href="/RoomTypes/RoomTypesAvailable" class="btn btn-sm btn-danger">Explore Rooms</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="col-md-9">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="card shadow-sm">
+                        <img src="https://cdn.pixabay.com/photo/2014/07/21/19/20/lobby-398845_640.jpg" class="card-img-top" alt="Elegant Lobby" style="height: 150px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title text-dark">Elegant Lobby</h5>
+                            <p class="card-text text-muted">Luxury from the moment you enter.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" class="card-img-top" alt="Room" style="height: 150px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title text-dark">Cozy Rooms</h5>
+                            <p class="card-text text-muted">Comfort with modern amenities.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card shadow-sm">
+                        <img src="https://images.pexels.com/photos/338504/pexels-photo-338504.jpeg?auto=compress&cs=tinysrgb&w=600" class="card-img-top" alt="Pool" style="height: 150px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title text-dark">Relaxing pool</h5>
+                            <p class="card-text text-muted">Unwind in our luxurious pool.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Spa Facility -->
+                <div class="col-md-4">
+                    <div class="card shadow-sm">
+                        <img src="https://images.pexels.com/photos/2373201/pexels-photo-2373201.jpeg?auto=compress&cs=tinysrgb&w=600" class="card-img-top" alt="Spa" style="height: 150px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title text-dark">Spa Facility</h5>
+                            <p class="card-text text-muted">Rejuvenate your senses with our spa services.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dining Area -->
+                <div class="col-md-4">
+                    <div class="card shadow-sm">
+                        <img src="https://cdn.pixabay.com/photo/2015/09/15/11/04/hotel-940730_640.jpg" class="card-img-top" alt="Dining Area" style="height: 150px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title text-dark">Dining Area</h5>
+                            <p class="card-text text-muted">Enjoy world-class dining with scenic views.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conference Room -->
+                <div class="col-md-4">
+                    <div class="card shadow-sm">
+                        <img src="https://img.freepik.com/premium-photo/conference-room-with-large-screen-that-says-conference_783884-443786.jpg" class="card-img-top" alt="Conference Room" style="height: 150px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title text-dark">Conference Room</h5>
+                            <p class="card-text text-muted">State-of-the-art facilities for your business meetings.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

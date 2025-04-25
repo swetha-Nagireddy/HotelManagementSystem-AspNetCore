@@ -1,0 +1,32 @@
+﻿@model HotelMangSys.Models.ApplicationUser
+
+<h2>User Profile</h2>
+<div class="container mt-5">
+    <div class="card shadow-lg p-4">
+        <h3 class="card-title text-center mb-4">User Profile</h3>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Username</label>
+                <input class="form-control" value="@Model.UserName" readonly />
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Full Name</label>
+                <input class="form-control" value="@Model.FullName" readonly />
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Address</label>
+                <input class="form-control" value="@Model.Address" readonly />
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Email</label>
+                <input class="form-control" value="@Model.Email" readonly />
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Phone Number</label>
+                <input class="form-control" value="@Model.PhoneNumber" readonly />
+            </div>
+
+            <a asp-controller="Account" asp-action="UpdateProfile" class="btn btn-warning">Update Profile</a>
+        </div>
+    </div>
+</div>

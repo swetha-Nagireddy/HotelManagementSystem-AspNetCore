@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<LangVersion>latest</LangVersion>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- MSTest Framework -->
+		<PackageReference Include="MSTest.TestFramework" Version="3.6.4" />
+		<PackageReference Include="MSTest.TestAdapter" Version="3.6.4" />
+
+		<!-- Test SDK -->
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+
+		<!-- Moq for mocking -->
+		<PackageReference Include="Moq" Version="4.20.72" />
+
+		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="9.0.4" />
+		
+		<!-- EF Core In-Memory for Testing -->
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.4" />
+		<PackageReference Include="System.Runtime" Version="4.3.1" />
+		<PackageReference Include="xunit.extensibility.core" Version="2.9.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<!-- Reference to your main application -->
+		<ProjectReference Include="..\HotelMangSys\HotelMangSys.csproj" />
+	</ItemGroup>
+
+</Project>

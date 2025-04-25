@@ -1,0 +1,62 @@
+﻿@model HotelMangSys.Models.ViewModels.BookingHistoryViewModel
+
+@{
+    ViewData["Title"] = "Booking History";
+}
+
+<h2>Booking History</h2>
+
+@if (Model.Bookings != null && Model.Bookings.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Booking ID</th>
+                <th>User ID</th>
+                <th>Room ID</th>
+                <th>Room Type</th>
+                <th>Booking Date</th>
+                <th>Checkout Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var booking in Model.Bookings)
+            {
+                <tr>
+                    <td>@booking.BookingId</td>
+                    <td>@booking.UserId</td>
+                    <td>@booking.RoomId</td>
+                    <td>@booking.RoomType</td>
+                    <td>@booking.BookingDate</td>
+                    <td>@booking.CheckoutDate</td>
+                    <td>@booking.Status</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No bookings found.</p>
+}
+
+<style>
+    .pagination-centered {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+</style>
+
+<!-- Pagination Controls -->
+<nav aria-label="Page navigation example" class="pagination-centered">
+    <ul class="pagination">
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                <a class="page-link" href="@Url.Action("BookingHistory", new { page = i })">@i</a>
+            </li>
+        }
+    </ul>
+</nav>

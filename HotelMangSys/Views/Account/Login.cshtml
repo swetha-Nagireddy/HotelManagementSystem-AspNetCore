@@ -1,0 +1,59 @@
+﻿@model HotelMangSys.Models.ViewModels.LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+<h1>Enjoy you stay at best Hotel</h1>
+<h5>Please Login to Book a Room</h5>
+
+
+<form id="loginForm" method="post">
+    <div class="form-group">
+        <label for="Username">Username</label>
+        <input type="text" class="form-control" id="Username" name="Username" required />
+        <span asp-validation-for="Username" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Password">Password</label>
+        <input type="password" class="form-control" id="Password" name="Password" required />
+		<span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    </br></</br>
+    <button type="submit" class="btn btn-primary">Login</button>
+</form>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#loginForm").submit(function (e) {
+                e.preventDefault();
+
+                var username = $("#Username").val();
+                var password = $("#Password").val();
+
+                $.ajax({
+                    url: "/Account/Login",
+                    type: "POST",
+                    data: {
+                        Username: username,
+                        Password: password
+                    },
+                    success: function (data) {
+                        if (data && data.token) {
+                            alert("JWT Token: " + data.token);
+                            localStorage.setItem("jwtToken", data.token);
+                            window.location.href = "/Home/Index";
+                        } else {
+                            alert("Login failed. Token not received.");
+                        }
+                    },
+                    error: function (xhr) {
+                        alert("Login failed: " + xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+    <partial name="_ValidationScriptsPartial" />
+}

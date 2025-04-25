@@ -1,0 +1,84 @@
+﻿@model HotelMangSys.Models.ViewModels.RoomListViewModel
+
+@{
+    ViewData["Title"] = "Room Types Available";
+}
+
+<h2>Room Types Available</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+
+<form asp-action="RoomTypesAvailable" method="get">
+    <div class="form-group">
+        <label for="searchQuery">Search:</label>
+        <input type="text" id="searchQuery" name="searchQuery" class="form-control" value="@Model.SearchQuery" />
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+<br />
+<br />
+
+@if (Model.Rooms != null && Model.Rooms.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Room ID</th>
+                <th>Room Type</th>
+                <th>Price</th>
+                <th>Is Available</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var room in Model.Rooms)
+            {
+                <tr>
+                    <td>@room.Id</td>
+                    <td>@room.Type</td>
+                    <td>@room.Price</td>
+                    <td>@(room.IsAvailable ? "Yes" : "No")</td>
+                    <td>
+                        <a asp-action="EditRoom" asp-route-id="@room.Id" class="btn btn-warning">Edit</a>
+                        <a asp-action="DeleteRoom" asp-route-id="@room.Id" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No rooms found matching the search criteria.</p>
+}
+
+<a asp-action="AddRoom" class="btn btn-primary">Add Room</a>
+
+<style>
+    .pagination-centered {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+</style>
+
+<!-- Pagination Controls -->
+<nav aria-label="Page navigation example" class="pagination-centered">
+    <ul class="pagination">
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                <a class="page-link" href="@Url.Action("RoomTypesAvailable", new { searchQuery = Model.SearchQuery, page = i, pageSize = Model.PageSize })">@i</a>
+            </li>
+        }
+    </ul>
+</nav>

@@ -1,0 +1,39 @@
+﻿@model HotelMangSys.Models.Room
+
+@{
+    ViewData["Title"] = "Delete Room";
+}
+
+<h2>Delete Room</h2>
+
+<h3>Are you sure you want to delete this room?</h3>
+<div>
+    <h4>Room Details</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Type)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Type)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IsAvailable)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IsAvailable)
+        </dd>
+    </dl>
+
+    <form asp-action="DeleteRoom" asp-route-id="@Model.Id" method="post">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Delete" class="btn btn-danger" />
+        <a asp-action="RoomTypesAvailable" class="btn btn-secondary">Back to List</a>
+    </form>
+</div>

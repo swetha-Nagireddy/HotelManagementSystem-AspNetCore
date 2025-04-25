@@ -1,0 +1,52 @@
+﻿@model HotelMangSys.Models.Booking
+
+@{
+    ViewData["Title"] = "Create Booking";
+}
+
+<h2>Create Booking</h2>
+
+<form asp-action="CreateBooking" method="post">
+    @Html.AntiForgeryToken()
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="UserId"></label>
+        <input asp-for="UserId" class="form-control" readonly />
+        <span asp-validation-for="UserId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="RoomType"></label>
+        <select asp-for="RoomType" class="form-control">
+            <option value="">-- Select Room Type --</option>
+            <option value="Single AC">Single AC</option>
+            <option value="Single">Single </option>
+            <option value="Double AC">Double AC</option>
+            <option value="Double">Double </option>
+            <option value="Twin Room">Twin Room</option>
+            <option value="Twin Room AC">Twin Room AC</option>
+            <option value="TripleRoom">Triple Room</option>
+            <option value="TripleRoom AC">Triple Room  AC</option>
+            <option value="Quad Room">QuadRoom</option>
+            <option value="Junior Suit">Junior Suit</option>
+            <option value="Presidential Suit">Presidential Suit</option>
+            <option value="Studio Room">Studio Room</option>
+            <option value="	Penthouse">	Penthouse</option>
+
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="BookingDate"></label>
+        <input asp-for="BookingDate" class="form-control" type="date" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CheckoutDate"></label>
+        <input asp-for="CheckoutDate" class="form-control" type="date" />
+    </div>
+    </br></br>
+    <button type="submit" class="btn btn-primary">Book Now</button>
+</form>

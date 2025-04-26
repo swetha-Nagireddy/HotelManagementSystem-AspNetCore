@@ -39,6 +39,11 @@ builder.Services.AddRazorPages();
 
 // Register JWT token service
 builder.Services.AddScoped<JwtTokenService>();
+builder.Services.AddScoped<BookingService>();
+builder.Services.AddScoped<RoomService>();
+builder.Services.AddScoped<FeedbackService>();
+builder.Services.AddScoped<IDapperWrapper, DapperWrapper>();
+builder.Services.AddScoped<IRoomService, RoomService>();
 
 // Configure JWT Authentication
 builder.Services.AddAuthentication("Bearer")
@@ -81,8 +86,14 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 
-// Map default controller route
+// Map default controller route using convention based routing
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Account}/{action=Login}/{id?}");
+
+
+
+
+app.MapControllers(); 
+
 app.Run();

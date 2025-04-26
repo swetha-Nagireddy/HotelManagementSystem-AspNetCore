@@ -1,216 +1,139 @@
-﻿using AspNetCoreGeneratedDocument;
-
-using HotelMangSys.Models;
+﻿using HotelMangSys.Models;
 using HotelMangSys.Models.ViewModels;
+using HotelMangSys.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace HotelMangSys.Controllers
 {
-    /// <summary>
-    /// Controller for managing room types.
-    /// </summary>
-    public class RoomTypes : Controller
+    public class RoomTypesController : Controller
     {
-        private readonly ApplicationDbContext _context;
-        private readonly ILogger<RoomTypes> _logger;
+        private readonly IRoomService _roomService;
+        private readonly ILogger<RoomTypesController> _logger;
 
-        public RoomTypes(ApplicationDbContext context,ILogger<RoomTypes> logger)
+        public RoomTypesController(IRoomService roomService, ILogger<RoomTypesController> logger)
         {
-            _context = context;
+            _roomService = roomService;
             _logger = logger;
         }
 
-        /// <summary>
-        /// Fetches available room types from the database.
-        /// </summary>
-        /// <param name="searchQuery"></param>
-        /// <param name="page"></param>
-        /// <param name="pageSize"></param>
-        /// <returns></returns>
-
-        public async Task<IActionResult> RoomTypesAvailable(string searchQuery, int page = 1, int pageSize = 5)
+        // GET: /Rooms
+        // Main Page
+        // Show Rooms with Pagination
+        // Show Rooms with Pagination
+        [HttpGet]
+        public async Task<IActionResult> GetPagedRooms(int pageNumber = 1)
         {
-            IQueryable<Room> rooms = _context.Rooms.AsNoTracking(); // Use AsNoTracking for better performance
+            var allRooms = await _roomService.GetAllRoomsAsync(); // Fetch all once
+            int pageSize = 5;
 
-            if (!string.IsNullOrEmpty(searchQuery))
+            var roomsToShow = allRooms
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            var model = new RoomListViewModel
             {
-                _logger.LogInformation("Searching for room types with query: {SearchQuery}", searchQuery);
-                // Use DbSet's FromSqlInterpolated instead of FromSqlRaw for better safety and readability
-                rooms = _context.Rooms.FromSqlInterpolated($"SELECT * FROM Rooms WHERE LOWER(Type) LIKE LOWER({searchQuery} + '%') OR Price LIKE {searchQuery} + '%'");
-            }
-
-            // Calculate total count and total pages
-            int totalCount = await rooms.CountAsync();
-            int totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
-
-            // Apply pagination
-            var roomList = await rooms.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
-
-            // Create the view model
-            var viewModel = new RoomListViewModel
-            {
-                Rooms = roomList,
-                PageNumber = page,
-                PageSize = pageSize,
-                TotalPages = totalPages,
-                TotalCount = totalCount,
-                SearchQuery = searchQuery // Ensure search query is passed to the view
+                Rooms = roomsToShow,
+                PageNumber = pageNumber,
+                TotalPages = (int)Math.Ceiling(allRooms.Count / (double)pageSize)
             };
 
-            _logger.LogInformation("Fetched room types from the database.");
-            return View(viewModel);
+            return View(model);
         }
 
-        /// <summary>
-        /// GET: Add Room
-        /// </summary>
-        /// <returns></returns>
-        public IActionResult AddRoom()
+           
+
+        // For autocomplete API
+        [HttpGet("/api/room/autocomplete")]
+        public async Task<IActionResult> AutoComplete(string query)
         {
-            return View();
+            if (string.IsNullOrWhiteSpace(query))
+                return Ok(new List<Room>());
+
+            var rooms = await _roomService.SearchRoomsAsync(query);
+            return Ok(rooms);
         }
 
-        // POST: Add Room
+        [HttpGet("/Rooms/FilterByRoomType")]
+        public async Task<IActionResult> FilterByRoomType(string type)
+        {
+            var rooms = await _roomService.SearchRoomsAsync(type);
+
+            var model = new RoomListViewModel
+            {
+                Rooms = rooms,
+                PageNumber = 1 // Search result page is 1
+            };
+
+            return View("GetpagedRooms", model); // reuse same view
+        }
+
+
+        public IActionResult AddRoom() => View();
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddRoom(Room room)
         {
-            if (ModelState.IsValid)
-            {
-                // Add the room to the database
-                _context.Rooms.Add(room);
-                await _context.SaveChangesAsync();
-                _logger.LogInformation("Added a new room type to the database.");
-                
+            if (!ModelState.IsValid)
+                return View(room);
 
-                return RedirectToAction(nameof(RoomTypesAvailable));  // Redirect to Room Types after adding
-            }
-            _logger.LogWarning("Failed to add a new room type. Model state is invalid.");
-            return View(room);  // If the form is invalid, return the same view
+            await _roomService.AddRoomAsync(room);
+            TempData["SuccessMessage"] = "Room added successfully.";
+            return RedirectToAction(nameof(GetPagedRooms));
         }
 
-
-        //updte
-        // GET: Edit Room
-        //[Authorize(Roles ="Admin")]
-        public async Task<IActionResult> EditRoom(int? id)
+        public async Task<IActionResult> EditRoom(int id)
         {
-            if (id == null)
-            {
-                _logger.LogWarning("EditRoom called with null ID.");
-                return NotFound();
-            }
-
-            var room = await _context.Rooms.FindAsync(id);
+            var room = await _roomService.GetRoomByIdAsync(id);
             if (room == null)
-            {
                 return NotFound();
-            }
+
             return View(room);
         }
 
-        // POST: Edit Room
-        //[Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditRoom(int id, Room room)
         {
-            
             if (id != room.Id)
-            {
-                _logger.LogWarning("EditRoom called with mismatched ID. Expected: {ExpectedId}, Actual: {ActualId}", id, room.Id);
                 return NotFound();
-            }
 
+            if (!ModelState.IsValid)
+                return View(room);
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _logger.LogInformation("Updating room with ID {Id}.", id);
-                    _context.Update(room);
-                    await _context.SaveChangesAsync();
-                    _logger.LogInformation("Room with ID {Id} updated successfully.", id);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!_context.Rooms.Any(r => r.Id == id))
-                    {
-                        _logger.LogWarning("Room with ID {Id} not found for update.", id);
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(RoomTypesAvailable));
-            }
-            return View(room);
+            await _roomService.UpdateRoomAsync(room);
+            TempData["SuccessMessage"] = "Room updated successfully.";
+            return RedirectToAction(nameof(GetPagedRooms));
         }
 
-       
-
-        // GET: Delete Room
-        public async Task<IActionResult> DeleteRoom(int? id)
+        public async Task<IActionResult> DeleteRoom(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var room = await _context.Rooms.FindAsync(id);
+            var room = await _roomService.GetRoomByIdAsync(id);
             if (room == null)
-            {
                 return NotFound();
-            }
+
             return View(room);
         }
 
-
-
-        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("DeleteRoom")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles="Admin")]
         public async Task<IActionResult> DeleteRoomConfirmed(int id)
         {
-            //// Check if the current user is in the Admin role
-            //if (!User.IsInRole("Admin"))
-            //{
-            //    TempData["ErrorMessage"] = "You are not authorized to delete a room.";
-            //    _logger.LogWarning("Unauthorized delete attempt by user: {User}", User.Identity.Name);
-            //    return RedirectToAction("RoomTypesAvailable");
-            //}
-
             try
             {
-                var room = await _context.Rooms.FindAsync(id);
-                if (room == null)
-                {
-                    _logger.LogWarning("Attempted to delete room with ID {Id}, but it was not found.", id);
-                    return NotFound();
-                }
-
-                _context.Rooms.Remove(room);
-                await _context.SaveChangesAsync();
-                _logger.LogInformation("Deleted room with ID {Id} successfully.", id);
+                await _roomService.DeleteRoomAsync(id);
                 TempData["SuccessMessage"] = "Room deleted successfully.";
-            }
-            catch (DbUpdateException dbEx)
-            {
-                _logger.LogError(dbEx, "Error occurred while deleting room with ID {Id}.", id);
-                TempData["ErrorMessage"] = "Unable to delete the room. It may be linked to a booking.";
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Unexpected error occurred while deleting room with ID {Id}.", id);
-                TempData["ErrorMessage"] = "An unexpected error occurred.";
-                _logger.LogError(ex, "Unexpected error occurred while deleting room with ID {Id}.", id);
+                _logger.LogError(ex, "Error deleting room with ID {Id}", id);
+                TempData["ErrorMessage"] = "An error occurred while deleting the room.";
             }
 
-            return RedirectToAction("RoomTypesAvailable");
+            return RedirectToAction(nameof(GetPagedRooms));
         }
 
         public IActionResult AccessDenied()
@@ -218,6 +141,5 @@ namespace HotelMangSys.Controllers
             TempData["ErrorMessage"] = "You are not authorized to access this page.";
             return View();
         }
-
     }
 }

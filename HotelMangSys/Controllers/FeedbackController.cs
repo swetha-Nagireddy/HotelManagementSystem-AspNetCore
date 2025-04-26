@@ -1,25 +1,17 @@
-﻿using System.Security.Claims;
-using AutoMapper;
-using HotelMangSys.Models;
+﻿using HotelMangSys.Models;
+using HotelMangSys.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelMangSys.Controllers
 {
     public class FeedbackController : Controller
     {
-        private readonly ApplicationDbContext _context;
-        private readonly IMapper _mapper;
+        private readonly FeedbackService _feedbackService;
 
-        public FeedbackController(ApplicationDbContext context, IMapper mapper)
+        public FeedbackController(FeedbackService feedbackService)
         {
-            _context = context;
-            _mapper = mapper;
+            _feedbackService = feedbackService;
         }
-
-        /// <summary>
-        /// GET: Submit feedback form
-        /// </summary>
-        /// <returns></returns>
 
         [HttpGet]
         public IActionResult SubmitFeedback()
@@ -27,28 +19,15 @@ namespace HotelMangSys.Controllers
             return View();
         }
 
-        /// <summary>
-        /// POST: Submit feedback form
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> SubmitFeedback(Feedback model)
         {
-            if (Request.Cookies.TryGetValue("UserId", out string userId))
-            {
-                model.UserId = userId;
-            }
-            else
+            if (!Request.Cookies.TryGetValue("UserId", out string userId))
             {
                 return RedirectToAction("Login", "Account");
             }
 
-            model.SubmittedOn = DateTime.Now;
-
-            _context.Feedbacks.Add(model);
-            await _context.SaveChangesAsync();
-
+            await _feedbackService.SubmitFeedbackAsync(model, userId);
             TempData["FeedbackSuccess"] = "Feedback submitted successfully!";
             return RedirectToAction("SubmitFeedback");
         }

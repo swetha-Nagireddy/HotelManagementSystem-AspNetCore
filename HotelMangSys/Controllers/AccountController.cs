@@ -12,7 +12,7 @@ namespace HotelMangSys.Controllers
 {
     public class AccountController : Controller
     {
-       
+
         private readonly ILogger<AccountController> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -211,7 +211,7 @@ namespace HotelMangSys.Controllers
                     user.Email = model.Email;
                     user.PhoneNumber = model.PhoneNumber;
                     var result = await _userManager.UpdateAsync(user);
-                    
+
                     if (result.Succeeded)
                     {
                         _logger.LogInformation("Profile updated successfully for UserId: {UserId}", model.Id);
@@ -232,7 +232,7 @@ namespace HotelMangSys.Controllers
                     user.PhoneNumber = model.PhoneNumber;
 
                     var result = await _userManager.UpdateAsync(user);
-                    
+
                     if (result.Succeeded)
                     {
                         _logger.LogInformation("Profile updated successfully for UserId: {UserId}", model.Id);

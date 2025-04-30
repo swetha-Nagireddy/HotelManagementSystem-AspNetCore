@@ -24,6 +24,7 @@ builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
 
 builder.Services.AddAutoMapper(typeof(FeedbackProfile));
+builder.Services.AddMemoryCache();
 
 // Configure DbContext and Identity
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

@@ -1,7 +1,8 @@
 ﻿using HotelMangSys.Models;
 
 namespace HotelMangSys.Models{
-public class Booking
+    // This class represents a booking in the hotel management system.
+    public class Booking
 {
     public int Id { get; set; }
 

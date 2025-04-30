@@ -1,5 +1,6 @@
 ﻿namespace HotelMangSys.Models
 {
+    // This class represents a booking history entry in the hotel management system.
     public class BookingHistoryDto
     {
         public int BookingId { get; set; }

@@ -3,6 +3,9 @@ using Dapper;
 
 namespace HotelMangSys.Services
 {
+    /// <summary>
+    /// /// Dapper wrapper for database operations
+    /// </summary>
     public class DapperWrapper : IDapperWrapper
     {
         public async Task<IEnumerable<T>> QueryAsync<T>(IDbConnection connection, string sql, object? param = null, IDbTransaction? transaction = null)

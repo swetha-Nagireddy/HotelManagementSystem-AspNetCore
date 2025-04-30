@@ -10,6 +10,7 @@ using HotelMangSys.Exceptions;
 
 namespace HotelMangSys.Controllers
 {
+   
     public class AccountController : Controller
     {
 
@@ -33,6 +34,7 @@ namespace HotelMangSys.Controllers
         }
 
         // Register Page
+        [HttpGet]
         public IActionResult Register()
         {
             return View();
@@ -44,7 +46,6 @@ namespace HotelMangSys.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)
@@ -54,7 +55,7 @@ namespace HotelMangSys.Controllers
                 try
                 {
                     var existingUserByUsername = await _userManager.FindByNameAsync(model.Username);
-                    if (existingUserByUsername != null)
+                    if (existingUserByUsername != null) //checks username presented or not
                     {
                         throw new UserAlreadyExistsException("Username is already taken.");
                     }
@@ -109,7 +110,7 @@ namespace HotelMangSys.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid)//check validations
             {
                 var user = await _userManager.FindByNameAsync(model.Username);
 
@@ -150,7 +151,7 @@ namespace HotelMangSys.Controllers
         /// GET: User details page.
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
+       
         public async Task<IActionResult> UserDetails()
         {
             if (Request.Cookies.TryGetValue("UserId", out var userId))
@@ -257,6 +258,9 @@ namespace HotelMangSys.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
+
+            // 🧹 Remove the UserId cookie
+            Response.Cookies.Delete("UserId");
             _logger.LogInformation("User logged out.");
             return RedirectToAction("Login");
         }

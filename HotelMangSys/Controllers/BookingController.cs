@@ -18,6 +18,10 @@ namespace HotelMangSys.Controllers
             _logger = logger;
         }
 
+        /// <summary>
+        /// method to get  details to book a room 
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("book-room")]
         public IActionResult CreateBooking()
         {
@@ -33,6 +37,11 @@ namespace HotelMangSys.Controllers
 
             return View(model);
         }
+        /// <summary>
+        /// method for creating a booking and updating the availability of the room
+        /// </summary>
+        /// <param name="booking"></param>
+        /// <returns></returns>
 
         [HttpPost("CreatingBooking")]
         [ValidateAntiForgeryToken]
@@ -70,6 +79,11 @@ namespace HotelMangSys.Controllers
                 return View(booking);
             }
         }
+        /// <summary>
+        /// to get confirmtion after booking
+        /// </summary>
+        /// <param name="bookingId"></param>
+        /// <returns></returns>
         [HttpGet("BookingConfirmation/{bookingId}")]
         public IActionResult BookingConfirmation(int bookingId)
         {
@@ -77,6 +91,12 @@ namespace HotelMangSys.Controllers
             return View();
         }
 
+        /// <summary>
+        /// action method to get the booking history of the user
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         [HttpGet("History")]
         public async Task<IActionResult> BookingHistory(int page = 1, int pageSize = 5)
         {

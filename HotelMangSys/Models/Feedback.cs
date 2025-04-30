@@ -1,5 +1,6 @@
 ﻿namespace HotelMangSys.Models
 {
+    // This class represents a feedback entry in the hotel management system.
     public class Feedback
     {
         public int Id { get; set; }

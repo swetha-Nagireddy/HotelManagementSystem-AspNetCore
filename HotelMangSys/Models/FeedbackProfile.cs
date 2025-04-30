@@ -3,6 +3,7 @@ using HotelMangSys.Models.ViewModels;
 
 namespace HotelMangSys.Models
 {
+    // This class maps Feedback to FeedbackViewModel using AutoMapper.
     public class FeedbackProfile :Profile
     {
         public FeedbackProfile()

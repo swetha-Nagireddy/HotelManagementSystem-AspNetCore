@@ -14,6 +14,11 @@ namespace HotelMangSys.Services
         {
             _configuration = configuration;
         }
+        /// <summary>
+        /// /// method to generate JWT token for user authentication
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
 
         public string GenerateJwtToken(string username)
         {
